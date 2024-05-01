@@ -21,26 +21,37 @@ dotenv.config();
 
 // Connecting to database
 database.connect();
- 
+
 // Middlewares
 app.use(express.json());
 app.use(cookieParser());
 app.use(
-	cors({
-		origin: "https://study-notion-frontend-livid-gamma.vercel.app",
-		credentials: true,
-		methods: ["*"]
-	})
+  cors({
+    origin: ["https://study-notion-frontend-livid-gamma.vercel.app", "*"],
+    credentials: true,
+    methods: ["*"],
+  })
 );
 app.use(
-	fileUpload({
-		useTempFiles: true,
-		tempFileDir: "/tmp/",
-	})
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+  })
 );
 
 // Connecting to cloudinary
 cloudinaryConnect();
+
+// Add middleware to enable CORS
+app.use((req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://study-notion-frontend-livid-gamma.vercel.app"
+  );
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
 
 // Setting up routes
 app.use("/api/v1/auth", userRoutes);
@@ -51,15 +62,15 @@ app.use("/api/v1/reach", contactUsRoute);
 
 // Testing the server
 app.get("/", (req, res) => {
-	return res.json({
-		success: true,
-		message: "Your server is up and running ...",
-	});
+  return res.json({
+    success: true,
+    message: "Your server is up and running ...",
+  });
 });
 
 // Listening to the server
 app.listen(PORT, () => {
-	console.log(`App is listening at ${PORT}`);
+  console.log(`App is listening at ${PORT}`);
 });
 
 // End of code.
