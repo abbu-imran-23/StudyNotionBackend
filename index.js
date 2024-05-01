@@ -27,8 +27,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
 	cors({
-		origin: "*",
+		origin: "https://study-notion-frontend-livid-gamma.vercel.app",
 		credentials: true,
+		methods: ["*"]
 	})
 );
 app.use(
